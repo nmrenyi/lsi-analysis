@@ -8,6 +8,8 @@ def main():
     df = pd.read_csv(DATA_PATH, sep='\t')
     text_list = [eval(x) for x in df['text'].tolist()]  # list of word list
     vectorizer = CountVectorizer()
+
+    # TODO: how to vectorize Chinese sentences
     X = vectorizer.fit_transform([' '.join(x) for x in text_list])
     ou = vectorizer.get_feature_names_out()
     vec_set = set(ou)
