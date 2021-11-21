@@ -15,7 +15,8 @@ def get_term_doc_matrix(data_name):
     # include one character as a token (in Chinese one character could be meaningful)
     vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b", stop_words=load_stopwords(), min_df=2)
 
-    term_doc_sparse = vectorizer.fit_transform([' '.join(x) for x in docs])  # shape: [#doc, #term]
+    doc_term_sparse = vectorizer.fit_transform([' '.join(x) for x in docs])  # shape: [#doc, #term]
+    term_doc_sparse = doc_term_sparse.transpose()  # shape: [#term, #doc]
     terms = vectorizer.get_feature_names_out().tolist()  # len: #term
     return term_doc_sparse, terms, docs
 
