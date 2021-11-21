@@ -19,11 +19,6 @@ def main():
     term_doc_sparse = vectorizer.fit_transform([' '.join(x) for x in doc_list])  # shape: [#doc, #term]
     terms = vectorizer.get_feature_names_out()  # len: #term
 
-    all_set = set(itertools.chain(*text_list))
-    print(len(all_set), len(vec_set))
-    print(all_set - vec_set)
-    print('='*50)
-    print(vec_set)
 
 if __name__ == '__main__':
     main()
