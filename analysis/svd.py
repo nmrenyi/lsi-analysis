@@ -9,6 +9,7 @@ def main():
     df = pd.read_csv(DATA_PATH, sep='\t')
     text_list = [eval(x) for x in df['text'].tolist()]  # list of word list
     # Chinese Tokenizing: ref: https://zhuanlan.zhihu.com/p/345346156
+    # include one character as a token (in Chinese one character could be meaningful)
     vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b")
 
     # TODO: how to vectorize Chinese sentences
