@@ -14,7 +14,7 @@ def main():
     text_list = [eval(x) for x in df['text'].tolist()]  # list of word list
     # Chinese Tokenizing: ref: https://zhuanlan.zhihu.com/p/345346156
     # include one character as a token (in Chinese one character could be meaningful)
-    vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b", stop_words=load_stopwords())
+    vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b", stop_words=load_stopwords(), min_df=2)
 
     # TODO: how to vectorize Chinese sentences
     X = vectorizer.fit_transform([' '.join(x) for x in text_list])
