@@ -3,6 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import itertools
 
 def load_stopwords(path=r'./stopwords-zh.txt'):
+    # default stopwords ref: https://github.com/stopwords-iso/stopwords-zh/blob/master/stopwords-zh.txt
     with open(path, encoding='utf8', mode='r') as f:
         return f.read().split('\n')
 
