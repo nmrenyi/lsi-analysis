@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
-
+from sklearn.utils.extmath import randomized_svd
 
 def load_stopwords(path=r'./stopwords-zh.txt'):
     # default stopwords ref: https://github.com/stopwords-iso/stopwords-zh/blob/master/stopwords-zh.txt
@@ -22,6 +22,12 @@ def get_term_doc_matrix(data_name):
 
 def main():
     term_doc_sparse, terms, docs = get_term_doc_matrix('toy100')
+    term_mat, sigma, doc_mat_T = randomized_svd(term_doc_sparse, n_components=5, random_state=2021)
+    doc_mat = doc_mat_T.transpose()
+    # term_mat.shape: [#term, n_components]
+    # doc_mat.shape : [#doc,  n_components]
+    # sigma.shape   : [#n_components]
+    
 
 if __name__ == '__main__':
     main()
