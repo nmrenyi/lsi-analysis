@@ -2,6 +2,9 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 import itertools
 
+def load_stopwords(path=r'./stopwords-zh.txt'):
+    with open(path, encoding='utf8', mode='r') as f:
+        return f.read().split('\n')
 
 def main():
     DATA_NAME = 'toy10'
@@ -23,4 +26,5 @@ def main():
 
 
 if __name__ == '__main__':
+    stopwords = load_stopwords()
     main()
