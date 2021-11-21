@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+from numpy import linalg as LA
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.utils.extmath import randomized_svd
 
@@ -27,7 +29,10 @@ def main():
     # term_mat.shape: [#term, n_components]
     # doc_mat.shape : [#doc,  n_components]
     # sigma.shape   : [#n_components]
-    
+
+    term_doc_approx = np.matmul(np.matmul(term_mat, np.diag(sigma)), doc_mat_T)
+    frob_norm = LA.norm(term_doc_sparse - term_doc_approx, ord='fro')
+
 
 if __name__ == '__main__':
     main()
