@@ -11,15 +11,13 @@ def main():
     DATA_NAME = 'toy10'
     DATA_PATH = f'../data/{DATA_NAME}.csv'
     df = pd.read_csv(DATA_PATH, sep='\t')
-    text_list = [eval(x) for x in df['text'].tolist()]  # list of word list
+    doc_list = [eval(x) for x in df['text'].tolist()]  # list, shape: [#doc, len_of_each_doc]
     # Chinese Tokenizing: ref: https://zhuanlan.zhihu.com/p/345346156
     # include one character as a token (in Chinese one character could be meaningful)
     vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b", stop_words=load_stopwords(), min_df=2)
 
-    # TODO: how to vectorize Chinese sentences
-    X = vectorizer.fit_transform([' '.join(x) for x in text_list])
-    ou = vectorizer.get_feature_names_out()
-    vec_set = set(ou)
+    term_doc_sparse = vectorizer.fit_transform([' '.join(x) for x in doc_list])  # shape: [#doc, #term]
+    terms = vectorizer.get_feature_names_out()  # len: #term
 
     all_set = set(itertools.chain(*text_list))
     print(len(all_set), len(vec_set))
