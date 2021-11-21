@@ -3,6 +3,9 @@ import numpy as np
 from numpy import linalg as LA
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.utils.extmath import randomized_svd
+import argparse
+from sys import stderr
+
 
 def load_stopwords(path=r'./stopwords-zh.txt'):
     # default stopwords ref: https://github.com/stopwords-iso/stopwords-zh/blob/master/stopwords-zh.txt
@@ -23,8 +26,8 @@ def get_term_doc_matrix(data_name):
     return term_doc_sparse, terms, docs
 
 def main():
-    term_doc_sparse, terms, docs = get_term_doc_matrix('toy100')
-    term_mat, sigma, doc_mat_T = randomized_svd(term_doc_sparse, n_components=5, random_state=2021)
+    term_doc_sparse, terms, docs = get_term_doc_matrix(args.dataset)
+    term_mat, sigma, doc_mat_T = randomized_svd(term_doc_sparse, n_components=args.dim, random_state=args.random_seed)
     doc_mat = doc_mat_T.transpose()
     # term_mat.shape: [#term, n_components]
     # doc_mat.shape : [#doc,  n_components]
@@ -32,7 +35,18 @@ def main():
 
     term_doc_approx = np.matmul(np.matmul(term_mat, np.diag(sigma)), doc_mat_T)
     frob_norm = LA.norm(term_doc_sparse - term_doc_approx, ord='fro')
+    print(frob_norm)
 
+
+def parse_args(parser: argparse.ArgumentParser):
+    parser.add_argument('--dim', type=int, default=100, help='truncated dimension for svd, default 100')
+    parser.add_argument('--random_seed', type=int, default=9999744, help='random seed, default 9999744')
+    parser.add_argument('--dataset', type=str, default='toy100', help='dataset name, default toy100')
+    return parser
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='')
+    parser = parse_args(parser)
+    args = parser.parse_args()
+    print(args, file=stderr)
     main()
