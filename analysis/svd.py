@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
-import itertools
+
 
 def load_stopwords(path=r'./stopwords-zh.txt'):
     # default stopwords ref: https://github.com/stopwords-iso/stopwords-zh/blob/master/stopwords-zh.txt
