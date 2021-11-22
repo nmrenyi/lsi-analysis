@@ -46,24 +46,26 @@ def main():
     frob_norm = LA.norm(term_doc_sparse - term_doc_approx, ord='fro')
     print('frobenius norm between raw and approximated:', frob_norm)
 
-    config = f'data_{args.dataset}-dim_{args.dim}-rand_{args.random_seed}'
-    save_dir = f'../result/{config}'
-    os.makedirs(save_dir, exist_ok=True)
+    if args.save:
+        config = f'data_{args.dataset}-dim_{args.dim}-rand_{args.random_seed}'
+        save_dir = f'../result/{config}'
+        os.makedirs(save_dir, exist_ok=True)
 
-    sparse.save_npz(os.path.join(save_dir, f'termDocSparse'), term_doc_sparse)
-    np.save(os.path.join(save_dir, f'termArray'), term_mat)
-    np.save(os.path.join(save_dir, f'docArray'), doc_mat)
-    with open(os.path.join(save_dir, 'term-doc.json'), mode='w', encoding='utf8') as f:
-        json.dump({'terms': terms, 'docs': docs}, f, ensure_ascii=False)
-    with open(os.path.join(save_dir, 'frobenius-norm-approx-raw.txt'), mode='w', encoding='utf8') as f:
-        f.write(str(frob_norm))
-    print(f'all files saved to {save_dir}')
+        sparse.save_npz(os.path.join(save_dir, f'termDocSparse'), term_doc_sparse)
+        np.save(os.path.join(save_dir, f'termArray'), term_mat)
+        np.save(os.path.join(save_dir, f'docArray'), doc_mat)
+        with open(os.path.join(save_dir, 'term-doc.json'), mode='w', encoding='utf8') as f:
+            json.dump({'terms': terms, 'docs': docs}, f, ensure_ascii=False)
+        with open(os.path.join(save_dir, 'frobenius-norm-approx-raw.txt'), mode='w', encoding='utf8') as f:
+            f.write(str(frob_norm))
+        print(f'all files saved to {save_dir}')
 
 
 def parse_args(parser: argparse.ArgumentParser):
     parser.add_argument('--dim', type=int, default=100, help='truncated dimension for svd, default 100')
     parser.add_argument('--random_seed', type=int, default=9999744, help='random seed, default 9999744')
     parser.add_argument('--dataset', type=str, default='toy100', help='dataset name, default toy100')
+    parser.add_argument('--save', action='store_true')
     return parser
 
 if __name__ == '__main__':
