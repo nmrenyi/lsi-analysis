@@ -23,7 +23,7 @@ def get_term_doc_matrix(data_name):
     # Chinese Tokenizing: ref: https://zhuanlan.zhihu.com/p/345346156
     # include one character as a token (in Chinese one character could be meaningful)
     print('vectorizing text...', file=stderr)
-    vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b", stop_words=load_stopwords(), min_df=2)
+    vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b", stop_words=load_stopwords(), min_df=args.min_df)
 
     doc_term_sparse = vectorizer.fit_transform([' '.join(x) for x in docs])  # shape: [#doc, #term]
     term_doc_sparse = doc_term_sparse.transpose()  # shape: [#term, #doc]
@@ -47,7 +47,7 @@ def main():
     print('frobenius norm between raw and approximated:', frob_norm)
 
     if args.save:
-        config = f'data_{args.dataset}-dim_{args.dim}-rand_{args.random_seed}'
+        config = f'data_{args.dataset}-dim_{args.dim}-mindf_{args.min_df}-rand_{args.random_seed}'
         save_dir = f'../result/{config}'
         os.makedirs(save_dir, exist_ok=True)
 
@@ -64,6 +64,7 @@ def main():
 def parse_args(parser: argparse.ArgumentParser):
     parser.add_argument('--dim', type=int, default=100, help='truncated dimension for svd, default 100')
     parser.add_argument('--random_seed', type=int, default=9999744, help='random seed, default 9999744')
+    parser.add_argument('--min_df', type=int, default=1, help='minimum term frequency allowed, default 1')
     parser.add_argument('--dataset', type=str, default='toy100', help='dataset name, default toy100')
     parser.add_argument('--save', action='store_true')
     return parser
