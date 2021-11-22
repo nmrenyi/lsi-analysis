@@ -28,11 +28,12 @@ def get_term_doc_matrix(data_name):
     doc_term_sparse = vectorizer.fit_transform([' '.join(x) for x in docs])  # shape: [#doc, #term]
     term_doc_sparse = doc_term_sparse.transpose()  # shape: [#term, #doc]
     terms = vectorizer.get_feature_names_out().tolist()  # len: #term
-    print('vectorizing complete', file=stderr)
+    print('text vectorizing complete', file=stderr)
     return term_doc_sparse, terms, docs
 
 def main():
     term_doc_sparse, terms, docs = get_term_doc_matrix(args.dataset)
+    print('term_doc matrix shape:', term_doc_sparse.shape, '(#term, #doc)')
     print('performing svd...', file=stderr)
     term_mat, sigma, doc_mat_T = randomized_svd(term_doc_sparse, n_components=args.dim, random_state=args.random_seed)
     doc_mat = doc_mat_T.transpose()
